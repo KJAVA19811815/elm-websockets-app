@@ -33,7 +33,7 @@ update msg {input, messages} =
       (Model newInput messages, Cmd.none)
 
     Send ->
-      (Model "" messages, WebSocket.send "ws://echo.websocket.org" input)
+      (Model "" messages, WebSocket.send "ws://localhost:3001/hello" input)
 
     NewMessage str ->
       (Model input (str :: messages), Cmd.none)
@@ -42,14 +42,14 @@ update msg {input, messages} =
 
 subscriptions : Model -> Sub Msg
 subscriptions model =
-  WebSocket.listen "ws://echo.websocket.org" NewMessage
+  WebSocket.listen "ws://localhost:3001/hello" NewMessage
 
 view : Model -> Html Msg
 view model =
   div []
-    [ div [] (List.map viewMessage model.messages)
-    , input [onInput Input] []
-    , button [onClick Send] [text "Send"]
+    [ div [class ""] (List.map viewMessage model.messages)
+    , input [onInput Input, required True] []
+    , button [onClick Send, class "btn btn-primary"] [text "Send"]
     ]
 
 
